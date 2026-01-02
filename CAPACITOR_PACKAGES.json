@@ -1,0 +1,29 @@
+{
+  "description": "Add these dependencies to your package.json devDependencies and dependencies",
+  "instructions": [
+    "npm install @capacitor/core @capacitor/cli @capacitor-community/sqlite",
+    "or with pnpm: pnpm add @capacitor/core @capacitor/cli @capacitor-community/sqlite"
+  ],
+  "dependencies": {
+    "@capacitor/core": "^4.8.0",
+    "@capacitor-community/sqlite": "^5.7.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^4.8.0",
+    "@types/node": "^20.0.0"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "cap:init": "npx cap init",
+    "cap:add:android": "npx cap add android",
+    "cap:sync": "npx cap sync android",
+    "cap:open": "npx cap open android",
+    "cap:run": "npx cap run android",
+    "cap:build:android": "npm run build && npx cap sync android",
+    "android:build": "cd android && ./gradlew build && cd ..",
+    "android:clean": "cd android && ./gradlew clean && cd .."
+  }
+}
