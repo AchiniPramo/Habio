@@ -2,11 +2,16 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useGame } from "@/store/gameStore";
 import type { Habit } from "@/store/gameStore";
+import {
+  calculateLevelProgress,
+  calculateXPGain,
+} from "@/lib/gamificationUtils";
 
 export default function HabitCreation() {
   const navigate = useNavigate();
   const location = useLocation();
   const { addHabit } = useGame();
+  const { state: gameState } = useGame();
   const [habitName, setHabitName] = useState("");
   const [frequency, setFrequency] = useState("daily");
   const [effort, setEffort] = useState("medium");
@@ -39,6 +44,15 @@ export default function HabitCreation() {
       navigate("/home");
     }
   };
+
+  // Estimate XP based on selected effort and neutral sentiment
+  const baseXP = effort === "low" ? 5 : effort === "high" ? 20 : 10;
+  const estimatedXP = calculateXPGain({
+    baseXP,
+    streak: 0,
+    sentiment: "neutral",
+  });
+  const projected = calculateLevelProgress(gameState.totalXP + estimatedXP);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white px-4 py-8">
@@ -130,6 +144,33 @@ export default function HabitCreation() {
                 {level.charAt(0).toUpperCase() + level.slice(1)}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* XP Preview */}
+        <div className="bg-white rounded-lg p-4 border border-border">
+          <p className="text-sm font-semibold text-foreground mb-2">
+            Estimated XP
+          </p>
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <p className="text-lg font-bold">{estimatedXP} XP</p>
+              <p className="text-xs text-muted-foreground">
+                per completion (preview)
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-muted-foreground">Level Progress</p>
+              <p className="text-sm font-semibold">
+                {projected.current} / {projected.target} XP
+              </p>
+            </div>
+          </div>
+          <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all"
+              style={{ width: `${projected.percentage}%` }}
+            />
           </div>
         </div>
 

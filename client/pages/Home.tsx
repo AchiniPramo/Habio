@@ -11,7 +11,7 @@ export default function Home() {
   // Get top habit by streak for mood display
   const topHabitByStreak = gameState.habits.reduce(
     (max, habit) => (habit.streak > (max?.streak || 0) ? habit : max),
-    null as any
+    null as any,
   );
 
   const getMoodEmoji = () => {
@@ -66,7 +66,9 @@ export default function Home() {
       {/* XP Bar & Level */}
       <div className="bg-white rounded-xl p-4 mb-8 shadow-sm border border-border">
         <div className="flex items-center justify-between mb-2">
-          <p className="font-semibold text-foreground">Level {gameState.level}</p>
+          <p className="font-semibold text-foreground">
+            Level {gameState.level}
+          </p>
           <p className="text-sm text-muted-foreground">
             {levelProgress.current} / {levelProgress.target} XP
           </p>
@@ -86,16 +88,37 @@ export default function Home() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-foreground">Today's Habits</h2>
-          <span className="text-sm bg-primary/10 text-primary font-semibold px-3 py-1 rounded-full">
-            {completedTodayCount} / {gameState.habits.length}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-sm bg-primary/10 text-primary font-semibold px-3 py-1 rounded-full">
+              {completedTodayCount} / {gameState.habits.length}
+            </span>
+            <button
+              onClick={() => navigate("/habit-creation")}
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold py-2 px-3 rounded-lg hover:shadow-md transition-all"
+            >
+              <svg
+                className="w-4 h-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 5v14M5 12h14"
+                />
+              </svg>
+              Create New Habit
+            </button>
+          </div>
         </div>
 
         {gameState.habits.length === 0 ? (
           <div className="bg-white rounded-xl p-8 text-center border border-border">
             <p className="text-muted-foreground mb-4">No habits yet</p>
             <button
-              onClick={() => navigate("/habit-intent")}
+              onClick={() => navigate("/habit-creation")}
               className="inline-block bg-primary text-primary-foreground font-semibold py-2 px-4 rounded-lg hover:shadow-md transition-all"
             >
               Create Your First Habit
@@ -146,8 +169,8 @@ export default function Home() {
         <p className="text-sm text-foreground">
           {gameState.level >= 3 ? (
             <span>
-              <span className="font-bold">🚀 You're leveling up fast!</span> Keep
-              the momentum going.
+              <span className="font-bold">🚀 You're leveling up fast!</span>{" "}
+              Keep the momentum going.
             </span>
           ) : (
             <span>
@@ -161,11 +184,7 @@ export default function Home() {
       {/* Navigation Footer */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-border px-4 py-3 flex items-center justify-around">
         <button className="flex flex-col items-center gap-1 text-primary">
-          <svg
-            className="w-6 h-6"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
             <path d="M10.5 1.5H3.75A2.25 2.25 0 001.5 3.75v16.5A2.25 2.25 0 003.75 22.5h16.5a2.25 2.25 0 002.25-2.25V10.5" />
             <path d="M13.5 3.75v6.75m6.75-6.75v6.75" />
           </svg>
